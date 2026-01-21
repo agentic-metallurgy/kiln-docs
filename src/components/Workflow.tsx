@@ -42,11 +42,12 @@ export function Workflow() {
           {steps.map((step, index) => (
             <div key={step.title} className="relative">
               <div className="bg-card border border-border rounded-xl p-6 h-full shadow-card hover:border-primary/50 transition-colors">
-                <div className={`${step.bgColor} w-12 h-12 rounded-lg flex items-center justify-center mb-4`}>
-                  <step.icon className={`h-6 w-6 ${step.color}`} />
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`${step.bgColor} w-12 h-12 rounded-lg flex items-center justify-center shrink-0`}>
+                    <step.icon className={`h-6 w-6 ${step.color}`} />
+                  </div>
+                  <h3 className="text-2xl font-bold">{step.title}</h3>
                 </div>
-                
-                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
                 <p className="text-muted-foreground text-sm">{step.description}</p>
               </div>
               

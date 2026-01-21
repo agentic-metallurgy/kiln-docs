@@ -52,10 +52,12 @@ export function Features() {
               key={feature.title} 
               className="bg-card border border-border rounded-xl p-6 shadow-card hover:shadow-glow hover:border-primary/30 transition-all duration-300"
             >
-              <div className="bg-primary/10 w-10 h-10 rounded-lg flex items-center justify-center mb-4">
-                <feature.icon className="h-5 w-5 text-primary" />
+              <div className="flex items-center gap-3 mb-3">
+                <div className="bg-primary/10 w-10 h-10 rounded-lg flex items-center justify-center shrink-0">
+                  <feature.icon className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold">{feature.title}</h3>
               </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
               <p className="text-muted-foreground text-sm">{feature.description}</p>
             </div>
           ))}

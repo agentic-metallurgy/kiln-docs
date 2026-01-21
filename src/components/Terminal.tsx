@@ -7,7 +7,7 @@ export function Terminal() {
             Start in <span className="text-gradient-fire">Seconds</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            A single command gets Kiln watching your project and ready to work.
+            A single command gets kiln watching your project and ready to work.
           </p>
         </div>
         
@@ -27,7 +27,7 @@ export function Terminal() {
             <div className="p-6 font-mono text-sm space-y-4">
               <div className="flex items-start gap-2">
                 <span className="text-kiln-ember">$</span>
-                <span className="text-foreground">kiln start --project my-org/my-project</span>
+                <span className="text-foreground">kiln</span>
               </div>
               
               <div className="text-muted-foreground space-y-1">

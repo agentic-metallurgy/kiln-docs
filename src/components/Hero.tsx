@@ -33,9 +33,7 @@ export function Hero() {
           </p>
           
           <p className="text-base text-muted-foreground/80 mb-2 max-w-xl">
-            Human-in-the-loop orchestrator.
-            <br />
-            Collaborate and co-author specs as a team, set to Implement when ready.
+            Collaborate and co-author as a team, set to Implement when ready.
           </p>
           <p className="text-base text-muted-foreground/80 mb-10 max-w-xl">
             Let kiln + Claude bake the PR for you.

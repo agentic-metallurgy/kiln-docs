@@ -33,7 +33,10 @@ export function Workflow() {
             How It <span className="text-gradient-fire">Works</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mb-2">
-            Move issues through kanban columns. Comment to make changes to the research/plan. Set to "Implement" when ready.
+            Move issues through the Kanban columns. Comment under the Issue to update the Research/Plan.
+          </p>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-2">
+            Set to "Implement" when ready, or just "yolo" from the Backlog and let kiln do the rest.
           </p>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Kiln watches and orchestrates Claude to handle each phase of development.

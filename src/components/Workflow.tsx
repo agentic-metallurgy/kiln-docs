@@ -29,18 +29,23 @@ export function Workflow() {
     <section className="py-24 relative">
       <div className="container px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
             How It <span className="text-gradient-fire">Works</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mb-2">
-            Move issues through the Kanban columns. Comment under the Issue to update the Research/Plan.
-          </p>
-          <p className="text-muted-foreground max-w-2xl mx-auto mb-2">
-            Set to "Implement" when ready, or just "yolo" from the Backlog and let kiln do the rest.
-          </p>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Kiln watches and orchestrates Claude to handle each phase of development.
-          </p>
+          <div className="max-w-2xl mx-auto bg-card/80 border border-border rounded-xl p-6 space-y-3">
+            <p className="text-foreground/90">
+              Move issues through the Kanban columns.
+            </p>
+            <p className="text-foreground/90">
+              Comment under the Issue to update the Research/Plan.
+            </p>
+            <p className="text-foreground/90">
+              Set to "Implement" when ready, or just <span className="text-kiln-glow font-semibold">"yolo"</span> from the Backlog and let kiln do the rest.
+            </p>
+            <p className="text-foreground/90">
+              Kiln watches and orchestrates Claude to handle each phase of development.
+            </p>
+          </div>
         </div>
         
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">

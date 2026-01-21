@@ -1,6 +1,4 @@
-import { Github, ArrowRight } from "lucide-react";
 import kilnLogo from "@/assets/kiln-logo.png";
-import { Button } from "@/components/ui/button";
 
 export function Hero() {
   return (
@@ -39,17 +37,6 @@ export function Hero() {
             Let kiln + Claude bake the PR for you.
           </p>
           
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="bg-gradient-fire text-black hover:opacity-90 transition-opacity shadow-glow group">
-              <Github className="mr-2 h-5 w-5" />
-              View on GitHub
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button size="lg" variant="outline" className="border-border hover:bg-secondary/50">
-              Documentation
-            </Button>
-          </div>
           
           {/* Install command */}
           <div className="mt-12">

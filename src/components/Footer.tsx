@@ -6,7 +6,7 @@ export function Footer() {
       <div className="container px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <span className="text-xl font-bold text-gradient-fire">Kiln</span>
+            <span className="text-xl font-bold text-gradient-fire">kiln</span>
             <span className="text-muted-foreground text-sm">
               Open source • MIT License
             </span>

@@ -1,4 +1,4 @@
-import { GitBranch, Bot, Shield, Zap, Settings, Users } from "lucide-react";
+import { GitBranch, Bot, Zap, Users } from "lucide-react";
 
 const features = [
   {
@@ -17,19 +17,9 @@ const features = [
     description: "Engineers control the flow. Review and approve at each stage before moving forward.",
   },
   {
-    icon: Shield,
-    title: "Safe by Design",
-    description: "No autonomous commits. All changes require human review before merging.",
-  },
-  {
     icon: Zap,
     title: "Fast Iteration",
     description: "Reduce time from issue to PR. Claude handles the boilerplate, you handle the decisions.",
-  },
-  {
-    icon: Settings,
-    title: "Configurable Workflows",
-    description: "Customize prompts, review stages, and automation rules to fit your team's process.",
   },
 ];
 

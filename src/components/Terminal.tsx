@@ -30,6 +30,15 @@ export function Terminal() {
                 <span className="text-foreground">kiln</span>
               </div>
               
+              {/* ASCII logo */}
+              <div className="flex justify-center py-2">
+                <img 
+                  src="/kiln-ascii.png" 
+                  alt="KILN" 
+                  className="h-12 w-auto"
+                />
+              </div>
+              
               <div className="text-muted-foreground space-y-1">
                 <p>
                   <span className="text-kiln-glow">●</span> Connected to GitHub Projects

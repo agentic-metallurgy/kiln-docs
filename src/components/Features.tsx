@@ -1,25 +1,23 @@
-import { GitBranch, Bot, Zap, Users } from "lucide-react";
+import { GitBranch, Bot, Users } from "lucide-react";
 
 const features = [
   {
     icon: GitBranch,
     title: "GitHub Projects Integration",
-    description: "Native integration with GitHub Projects v2. Monitors kanban board columns in real-time.",
+    description: "Native integration with GitHub Projects v2.",
+    description2: "Monitors kanban boards in real-time.",
   },
   {
     icon: Bot,
     title: "Claude-Powered",
-    description: "Leverages Claude's advanced reasoning for research, planning, and code generation.",
+    description: "Leverages Claude's advanced reasoning and tools.",
+    description2: "Uses your local Claude and subscription, no external login or API-key trickery needed.",
   },
   {
     icon: Users,
-    title: "Human-in-the-Loop",
-    description: "Engineers control the flow. Review and approve at each stage before moving forward.",
-  },
-  {
-    icon: Zap,
-    title: "Fast Iteration",
-    description: "Reduce time from issue to PR. Claude handles the boilerplate, you handle the decisions.",
+    title: "Built for Engineers",
+    description: "Kiln makes it easier to manage research, plans, PRDs, specs — all stored within GitHub issues.",
+    description2: "State is stored on the GitHub Project board as labels and statuses. It augments your process, doesn't force you to deal with complicated folder/document management.",
   },
 ];
 
@@ -48,7 +46,8 @@ export function Features() {
                 </div>
                 <h3 className="text-lg font-semibold">{feature.title}</h3>
               </div>
-              <p className="text-muted-foreground text-sm">{feature.description}</p>
+              <p className="text-muted-foreground text-sm mb-1">{feature.description}</p>
+              <p className="text-muted-foreground text-sm">{feature.description2}</p>
             </div>
           ))}
         </div>

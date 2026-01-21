@@ -32,9 +32,11 @@ export function Workflow() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             How It <span className="text-gradient-fire">Works</span>
           </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-2">
+            Move issues through kanban columns. Comment to make changes to the research/plan. Set to "Implement" when ready.
+          </p>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Move issues through your kanban columns. Kiln watches and orchestrates Claude 
-            to handle each phase of development.
+            Kiln watches and orchestrates Claude to handle each phase of development.
           </p>
         </div>
         

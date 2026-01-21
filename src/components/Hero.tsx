@@ -32,10 +32,13 @@ export function Hero() {
             Orchestrate Claude-powered workflows in GitHub
           </p>
           
-          <p className="text-base text-muted-foreground/80 mb-10 max-w-xl">
-            Human-in-the-loop workflow automation orchestrator.
+          <p className="text-base text-muted-foreground/80 mb-2 max-w-xl">
+            Human-in-the-loop orchestrator.
             <br />
-            Collaborate on a Kanban board as a team, let kiln + Claude handle the orchestration.
+            Collaborate and co-author specs as a team, set to Implement when ready.
+          </p>
+          <p className="text-base text-muted-foreground/80 mb-10 max-w-xl">
+            Let kiln + Claude bake the PR for you.
           </p>
           
           {/* CTAs */}

@@ -40,7 +40,9 @@ export function Workflow() {
               Comment under the Issue to update the Research/Plan.
             </p>
             <p className="text-foreground/90">
-              Set to "Implement" when ready, or just <span className="text-kiln-glow font-semibold">"yolo"</span> from the Backlog and let kiln do the rest.
+              Set to "Implement" when ready,
+              <br />
+              ... or just <span className="text-kiln-glow font-semibold">"yolo"</span> from the Backlog and let kiln do the rest.
             </p>
             <p className="text-foreground/90">
               Kiln watches and orchestrates Claude to handle each phase of development.

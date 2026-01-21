@@ -24,22 +24,22 @@ export function Hero() {
           
           {/* Title */}
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-            <span className="text-gradient-fire">Kiln</span>
+            <span className="text-gradient-fire">kiln</span>
           </h1>
           
           {/* Tagline */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-4 max-w-2xl">
-            Orchestrate Claude-powered workflows from your GitHub Projects
+            Orchestrate Claude-powered workflows in GitHub
           </p>
           
           <p className="text-base text-muted-foreground/80 mb-10 max-w-xl">
-            Human-in-the-loop development automation. Move issues through your kanban board, 
-            let Claude handle the execution.
+            Human-in-the-loop workflow automation orchestrator. Collaborate on a Kanban board as a team, 
+            let kiln + Claude handle the orchestration.
           </p>
           
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="bg-gradient-fire text-primary-foreground hover:opacity-90 transition-opacity shadow-glow group">
+            <Button size="lg" className="bg-gradient-fire text-black hover:opacity-90 transition-opacity shadow-glow group">
               <Github className="mr-2 h-5 w-5" />
               View on GitHub
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -52,8 +52,11 @@ export function Hero() {
           {/* Install command */}
           <div className="mt-12 w-full max-w-md">
             <div className="bg-card border border-border rounded-lg p-4 shadow-card">
-              <code className="font-mono text-sm text-muted-foreground">
-                <span className="text-kiln-ember">$</span> pip install kiln-cli
+              <code className="font-mono text-sm text-muted-foreground block">
+                <span className="text-kiln-ember">$</span> brew tap agentic-metallurgy/tap
+              </code>
+              <code className="font-mono text-sm text-muted-foreground block">
+                <span className="text-kiln-ember">$</span> brew install kiln
               </code>
             </div>
           </div>

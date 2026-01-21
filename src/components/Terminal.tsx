@@ -7,7 +7,7 @@ export function Terminal() {
             Start in <span className="text-gradient-fire">Seconds</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            A single command gets kiln watching your project and ready to work.
+            A single command gets kiln watching your project, ready to work.
           </p>
         </div>
         
@@ -31,11 +31,11 @@ export function Terminal() {
               </div>
               
               {/* ASCII logo */}
-              <div className="flex justify-center py-2">
+              <div className="py-2">
                 <img 
                   src="/kiln-ascii.png" 
                   alt="KILN" 
-                  className="h-12 w-auto"
+                  className="h-20 w-auto"
                 />
               </div>
               

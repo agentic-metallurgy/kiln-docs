@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { GitPullRequest, GitMerge } from "lucide-react";
 
 const columns = [
@@ -11,33 +11,52 @@ const columns = [
 ];
 
 const ticketTitles = [
-  "create api endpoint",
-  "evaluate tests",
-  "add monitoring",
-  "refactor utils",
-  "chore: edit docs",
-  "bug: /auth/me",
-  "vuln: update deps",
-  "add rate limiting",
-  "fix webhook handler",
-  "update schema",
+  "refactor daemon modules",
+  "improve initial setup UX",
+  "assess test coverage",
+  "add webhook handler",
 ];
 
-// Status tags based on column position and progress
-const getStatusTag = (column: number, isReady: boolean): { tag: string; tagColor: string } => {
-  switch (column) {
-    case 0: return { tag: "backlog", tagColor: "bg-gray-500" };
-    case 1: return isReady 
-      ? { tag: "research_ready", tagColor: "bg-blue-400" }
-      : { tag: "researching", tagColor: "bg-blue-600" };
-    case 2: return isReady 
-      ? { tag: "plan_ready", tagColor: "bg-purple-400" }
-      : { tag: "planning", tagColor: "bg-purple-600" };
-    case 3: return { tag: "implementing", tagColor: "bg-orange-500" };
-    case 4: return { tag: "ready to merge", tagColor: "bg-yellow-500" };
-    case 5: return { tag: "merged", tagColor: "bg-green-600" };
-    default: return { tag: "backlog", tagColor: "bg-gray-500" };
+// Status tags based on column and state
+type StatusTag = { tag: string; tagColor: string };
+
+const getStatusTags = (column: number, isReady: boolean, isEditing: boolean, isYolo: boolean): StatusTag[] => {
+  const tags: StatusTag[] = [];
+  
+  if (isEditing) {
+    tags.push({ tag: "editing", tagColor: "bg-gray-600" });
   }
+  
+  if (isYolo) {
+    tags.push({ tag: "yolo", tagColor: "bg-yellow-500" });
+  }
+  
+  switch (column) {
+    case 0: 
+      tags.push({ tag: "backlog", tagColor: "bg-gray-500" });
+      break;
+    case 1: 
+      tags.push(isReady 
+        ? { tag: "research_ready", tagColor: "bg-green-500" }
+        : { tag: "researching", tagColor: "bg-blue-500" });
+      break;
+    case 2: 
+      tags.push(isReady 
+        ? { tag: "plan_ready", tagColor: "bg-green-500" }
+        : { tag: "planning", tagColor: "bg-purple-500" });
+      break;
+    case 3: 
+      tags.push({ tag: "implementing", tagColor: "bg-orange-500" });
+      break;
+    case 4: 
+      tags.push({ tag: "ready to merge", tagColor: "bg-yellow-500" });
+      break;
+    case 5: 
+      tags.push({ tag: "merged", tagColor: "bg-green-600" });
+      break;
+  }
+  
+  return tags;
 };
 
 const contentLines = [
@@ -52,67 +71,109 @@ interface Issue {
   id: number;
   title: string;
   column: number;
-  isReady: boolean; // For research/plan columns - toggles between working and ready
-  isYolo?: boolean;
+  isReady: boolean;
+  isEditing: boolean;
+  isYolo: boolean;
 }
 
-// Initialize with fixed 10 tickets
-const initialIssues: Issue[] = [
-  { id: 1, title: ticketTitles[0], column: 0, isReady: false },
-  { id: 2, title: ticketTitles[1], column: 0, isReady: false },
-  { id: 3, title: ticketTitles[2], column: 0, isReady: false },
-  { id: 4, title: ticketTitles[3], column: 0, isReady: false },
-  { id: 5, title: ticketTitles[4], column: 1, isReady: false },
-  { id: 6, title: ticketTitles[5], column: 1, isReady: false },
-  { id: 7, title: ticketTitles[6], column: 2, isReady: false },
-  { id: 8, title: ticketTitles[7], column: 2, isReady: false },
-  { id: 9, title: ticketTitles[8], column: 3, isReady: false },
-  { id: 10, title: ticketTitles[9], column: 3, isReady: false },
+const createInitialIssues = (): Issue[] => [
+  { id: 1, title: ticketTitles[0], column: 0, isReady: false, isEditing: false, isYolo: false },
+  { id: 2, title: ticketTitles[1], column: 0, isReady: false, isEditing: false, isYolo: false },
+  { id: 3, title: ticketTitles[2], column: 0, isReady: false, isEditing: false, isYolo: false },
+  { id: 4, title: ticketTitles[3], column: 0, isReady: false, isEditing: false, isYolo: false },
+];
+
+// Scripted animation sequence
+const animationScript = [
+  // Move ticket 1 to research
+  { ticketId: 1, action: "move", column: 1 },
+  // Ticket 1: researching → editing
+  { ticketId: 1, action: "edit" },
+  // Ticket 1: editing done → research_ready
+  { ticketId: 1, action: "ready" },
+  // Move ticket 2 to research
+  { ticketId: 2, action: "move", column: 1 },
+  // Ticket 2: researching → editing
+  { ticketId: 2, action: "edit" },
+  // Move ticket 1 to plan
+  { ticketId: 1, action: "move", column: 2 },
+  // Ticket 2: research_ready
+  { ticketId: 2, action: "ready" },
+  // Ticket 1: planning → editing
+  { ticketId: 1, action: "edit" },
+  // Ticket 1: plan_ready
+  { ticketId: 1, action: "ready" },
+  // YOLO: Ticket 3 jumps to implement
+  { ticketId: 3, action: "yolo" },
+  // Move ticket 1 to implement
+  { ticketId: 1, action: "move", column: 3 },
+  // Move ticket 2 to plan
+  { ticketId: 2, action: "move", column: 2 },
+  // Ticket 3 to validate
+  { ticketId: 3, action: "move", column: 4 },
+  // Ticket 2: planning
+  { ticketId: 2, action: "edit" },
+  // Ticket 1 to validate
+  { ticketId: 1, action: "move", column: 4 },
+  // Ticket 3 to done (merged)
+  { ticketId: 3, action: "move", column: 5 },
+  // Ticket 2: plan_ready
+  { ticketId: 2, action: "ready" },
+  // Ticket 1 to done
+  { ticketId: 1, action: "move", column: 5 },
+  // Ticket 2 to implement
+  { ticketId: 2, action: "move", column: 3 },
+  // Ticket 4 yolo
+  { ticketId: 4, action: "yolo" },
+  // Ticket 2 to validate
+  { ticketId: 2, action: "move", column: 4 },
+  // Ticket 4 to validate
+  { ticketId: 4, action: "move", column: 4 },
+  // Ticket 2 to done
+  { ticketId: 2, action: "move", column: 5 },
+  // Ticket 4 to done
+  { ticketId: 4, action: "move", column: 5 },
 ];
 
 export function Workflow() {
-  const [issues, setIssues] = useState<Issue[]>(initialIssues);
+  const [issues, setIssues] = useState<Issue[]>(createInitialIssues());
+  const [step, setStep] = useState(0);
+
+  const applyStep = useCallback((issues: Issue[], scriptStep: typeof animationScript[0]): Issue[] => {
+    return issues.map(issue => {
+      if (issue.id !== scriptStep.ticketId) return issue;
+      
+      switch (scriptStep.action) {
+        case "move":
+          return { ...issue, column: scriptStep.column!, isReady: false, isEditing: false };
+        case "edit":
+          return { ...issue, isEditing: true };
+        case "ready":
+          return { ...issue, isReady: true, isEditing: false };
+        case "yolo":
+          return { ...issue, column: 3, isYolo: true };
+        default:
+          return issue;
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIssues((prev) => {
-        const newIssues = [...prev];
-        
-        // Find issues not in done
-        const movableIssues = newIssues.filter(i => i.column < 5);
-        if (movableIssues.length === 0) {
-          // Reset when all done
-          return initialIssues.map((issue, idx) => ({ ...issue, id: Date.now() + idx }));
+      setStep(prev => {
+        const nextStep = prev + 1;
+        if (nextStep >= animationScript.length) {
+          // Reset after completing the sequence
+          setIssues(createInitialIssues());
+          return 0;
         }
-        
-        // Randomly select one to progress
-        const toMove = movableIssues[Math.floor(Math.random() * movableIssues.length)];
-        const issueIndex = newIssues.findIndex(i => i.id === toMove.id);
-        
-        // Research and Plan columns have two stages: working → ready → next column
-        if ((toMove.column === 1 || toMove.column === 2) && !toMove.isReady) {
-          // Toggle to ready state
-          newIssues[issueIndex] = { ...toMove, isReady: true };
-        } else if (toMove.column === 0 && Math.random() > 0.8) {
-          // Yolo jump from backlog to implement
-          newIssues[issueIndex] = { ...toMove, column: 3, isYolo: true, isReady: false };
-        } else {
-          // Move to next column
-          const newColumn = toMove.column + 1;
-          newIssues[issueIndex] = { 
-            ...toMove, 
-            column: newColumn, 
-            isReady: false,
-            isYolo: toMove.isYolo && newColumn <= 5,
-          };
-        }
-        
-        return newIssues;
+        setIssues(issues => applyStep(issues, animationScript[nextStep]));
+        return nextStep;
       });
-    }, 1500);
+    }, 1800);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [applyStep]);
 
   return (
     <section className="py-24 relative">
@@ -150,7 +211,7 @@ export function Workflow() {
                     {issues
                       .filter((issue) => issue.column === colIndex)
                       .map((issue) => {
-                        const status = getStatusTag(issue.column, issue.isReady);
+                        const tags = getStatusTags(issue.column, issue.isReady, issue.isEditing, issue.isYolo);
                         return (
                           <div
                             key={issue.id}
@@ -160,10 +221,15 @@ export function Workflow() {
                               ${issue.isYolo ? "ring-2 ring-kiln-glow animate-pulse" : ""}
                             `}
                           >
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                              <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium text-white ${status.tagColor}`}>
-                                {status.tag}
-                              </span>
+                            <div className="flex flex-wrap items-center gap-1 mb-1.5">
+                              {tags.map((status, idx) => (
+                                <span 
+                                  key={idx}
+                                  className={`px-1.5 py-0.5 rounded text-[9px] font-medium text-white ${status.tagColor}`}
+                                >
+                                  {status.tag}
+                                </span>
+                              ))}
                             </div>
                             <div className="flex items-center gap-1.5">
                               {issue.column === 4 && (
@@ -174,11 +240,6 @@ export function Workflow() {
                               )}
                               <span className="truncate">{issue.title}</span>
                             </div>
-                            {issue.isYolo && issue.column < 5 && (
-                              <span className="text-[10px] text-kiln-glow font-semibold mt-1 block">
-                                yolo →
-                              </span>
-                            )}
                           </div>
                         );
                       })}

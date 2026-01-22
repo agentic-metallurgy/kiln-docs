@@ -62,7 +62,7 @@ export function Features() {
                 <div className="bg-primary/10 w-10 h-10 rounded-lg flex items-center justify-center shrink-0">
                   <feature.icon className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold">{feature.title}</h3>
+                <h3 className="text-xl font-semibold">{feature.title}</h3>
               </div>
               <p className="text-muted-foreground text-sm mb-1">{feature.description}</p>
               <p className="text-muted-foreground text-sm">{feature.description2}</p>

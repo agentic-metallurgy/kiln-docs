@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { GitPullRequest } from "lucide-react";
 
 const columns = [
   { id: "backlog", name: "Backlog", color: "bg-gray-400", description: "new issues" },
@@ -7,6 +8,17 @@ const columns = [
   { id: "implement", name: "Implement", color: "bg-orange-500", description: "write code" },
   { id: "validate", name: "Validate", color: "bg-yellow-500", description: "human review" },
   { id: "done", name: "Done", color: "bg-green-500", description: "complete" },
+];
+
+const ticketTitles = [
+  { title: "create api endpoint", tag: "feature", tagColor: "bg-blue-500" },
+  { title: "evaluate tests", tag: "test", tagColor: "bg-purple-500" },
+  { title: "add monitoring", tag: "infra", tagColor: "bg-cyan-500" },
+  { title: "refactor utils", tag: "refactor", tagColor: "bg-orange-500" },
+  { title: "chore: edit docs", tag: "docs", tagColor: "bg-gray-500" },
+  { title: "bug: /auth/me", tag: "bug", tagColor: "bg-red-500" },
+  { title: "vuln: update deps", tag: "security", tagColor: "bg-yellow-600" },
+  { title: "add rate limiting", tag: "feature", tagColor: "bg-blue-500" },
 ];
 
 const contentLines = [
@@ -20,15 +32,29 @@ const contentLines = [
 interface Issue {
   id: number;
   title: string;
+  tag: string;
+  tagColor: string;
   column: number;
   isYolo?: boolean;
+  hasPR?: boolean;
 }
+
+const getRandomTicket = () => {
+  const ticket = ticketTitles[Math.floor(Math.random() * ticketTitles.length)];
+  return {
+    id: Date.now() + Math.random(),
+    title: ticket.title,
+    tag: ticket.tag,
+    tagColor: ticket.tagColor,
+    column: 0,
+  };
+};
 
 export function Workflow() {
   const [issues, setIssues] = useState<Issue[]>([
-    { id: 1, title: "Add auth flow", column: 0 },
-    { id: 2, title: "Fix API bug", column: 1 },
-    { id: 3, title: "Update docs", column: 2 },
+    { ...getRandomTicket(), id: 1, column: 0 },
+    { ...getRandomTicket(), id: 2, column: 1 },
+    { ...getRandomTicket(), id: 3, column: 2 },
   ]);
 
   useEffect(() => {
@@ -36,14 +62,11 @@ export function Workflow() {
       setIssues((prev) => {
         const newIssues = [...prev];
         
-        // Find an issue to move
+        // Find an issue to move (not in done)
         const movableIssues = newIssues.filter(i => i.column < 5);
         if (movableIssues.length === 0) {
           // Reset when all done
-          return [
-            { id: Date.now(), title: "New feature", column: 0 },
-            { id: Date.now() + 1, title: "Bug fix", column: 0 },
-          ];
+          return [getRandomTicket(), { ...getRandomTicket(), id: Date.now() + 1 }];
         }
         
         // Randomly select one to move forward
@@ -54,20 +77,23 @@ export function Workflow() {
         if (toMove.column === 0 && Math.random() > 0.7) {
           newIssues[issueIndex] = { ...toMove, column: 3, isYolo: true };
         } else {
-          newIssues[issueIndex] = { ...toMove, column: toMove.column + 1, isYolo: false };
+          // When moving to validate (column 4), add PR icon
+          const newColumn = toMove.column + 1;
+          const hasPR = newColumn >= 4;
+          newIssues[issueIndex] = { 
+            ...toMove, 
+            column: newColumn, 
+            isYolo: toMove.isYolo && newColumn <= 4,
+            hasPR 
+          };
         }
         
         // Occasionally add a new issue to backlog
         if (Math.random() > 0.6 && newIssues.filter(i => i.column === 0).length < 2) {
-          const titles = ["Refactor utils", "Add tests", "Fix typo", "Update deps", "New endpoint"];
-          newIssues.push({
-            id: Date.now(),
-            title: titles[Math.floor(Math.random() * titles.length)],
-            column: 0,
-          });
+          newIssues.push(getRandomTicket());
         }
         
-        // Remove completed issues after a delay (represented by keeping max 6 issues)
+        // Remove completed issues after a delay (keeping max 6 issues)
         if (newIssues.length > 6) {
           const doneIssues = newIssues.filter(i => i.column === 5);
           if (doneIssues.length > 0) {
@@ -127,8 +153,15 @@ export function Workflow() {
                             ${issue.isYolo ? "ring-2 ring-kiln-glow animate-pulse" : ""}
                           `}
                         >
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium text-white ${issue.tagColor}`}>
+                              {issue.tag}
+                            </span>
+                          </div>
                           <div className="flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60" />
+                            {issue.hasPR && (
+                              <GitPullRequest className="w-3 h-3 text-green-500 flex-shrink-0" />
+                            )}
                             <span className="truncate">{issue.title}</span>
                           </div>
                           {issue.isYolo && (

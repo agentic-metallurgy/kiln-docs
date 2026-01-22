@@ -20,14 +20,14 @@ const ticketTitles = [
 // Status tags based on column and state
 type StatusTag = { tag: string; tagColor: string };
 
-const getStatusTags = (column: number, isReady: boolean, isEditing: boolean, isYolo: boolean): StatusTag[] => {
+const getStatusTags = (column: number, isReady: boolean, isEditing: boolean, isYolo: boolean, isYoloComplete: boolean): StatusTag[] => {
   const tags: StatusTag[] = [];
   
   if (isEditing) {
     tags.push({ tag: "editing", tagColor: "bg-gray-600" });
   }
   
-  if (isYolo) {
+  if (isYolo && !isYoloComplete) {
     tags.push({ tag: "yolo", tagColor: "bg-yellow-500" });
   }
   
@@ -74,65 +74,65 @@ interface Issue {
   isReady: boolean;
   isEditing: boolean;
   isYolo: boolean;
+  isYoloComplete: boolean;
 }
 
 const createInitialIssues = (): Issue[] => [
-  { id: 1, title: ticketTitles[0], column: 0, isReady: false, isEditing: false, isYolo: false },
-  { id: 2, title: ticketTitles[1], column: 0, isReady: false, isEditing: false, isYolo: false },
-  { id: 3, title: ticketTitles[2], column: 0, isReady: false, isEditing: false, isYolo: false },
-  { id: 4, title: ticketTitles[3], column: 0, isReady: false, isEditing: false, isYolo: false },
+  { id: 1, title: ticketTitles[0], column: 0, isReady: false, isEditing: false, isYolo: false, isYoloComplete: false },
+  { id: 2, title: ticketTitles[1], column: 0, isReady: false, isEditing: false, isYolo: false, isYoloComplete: false },
+  { id: 3, title: ticketTitles[2], column: 1, isReady: false, isEditing: false, isYolo: false, isYoloComplete: false },
+  { id: 4, title: ticketTitles[3], column: 1, isReady: false, isEditing: false, isYolo: false, isYoloComplete: false },
 ];
 
-// Scripted animation sequence
+// Scripted animation sequence - never more than 2 in any column
 const animationScript = [
+  // Ticket 3: researching → editing
+  { ticketId: 3, action: "edit" },
+  // Ticket 3: editing done → research_ready
+  { ticketId: 3, action: "ready" },
+  // Move ticket 3 to plan
+  { ticketId: 3, action: "move", column: 2 },
+  // Ticket 4: researching → editing  
+  { ticketId: 4, action: "edit" },
+  // Ticket 4: research_ready (stays here)
+  { ticketId: 4, action: "ready" },
+  // Ticket 3: planning → editing
+  { ticketId: 3, action: "edit" },
+  // Ticket 3: plan_ready
+  { ticketId: 3, action: "ready" },
+  // Move ticket 3 to implement (stays here as "implementing")
+  { ticketId: 3, action: "move", column: 3 },
   // Move ticket 1 to research
   { ticketId: 1, action: "move", column: 1 },
   // Ticket 1: researching → editing
   { ticketId: 1, action: "edit" },
-  // Ticket 1: editing done → research_ready
+  // Ticket 1: research_ready
   { ticketId: 1, action: "ready" },
-  // Move ticket 2 to research
-  { ticketId: 2, action: "move", column: 1 },
-  // Ticket 2: researching → editing
-  { ticketId: 2, action: "edit" },
   // Move ticket 1 to plan
   { ticketId: 1, action: "move", column: 2 },
-  // Ticket 2: research_ready
-  { ticketId: 2, action: "ready" },
-  // Ticket 1: planning → editing
+  // YOLO: Ticket 2 starts yolo journey
+  { ticketId: 2, action: "yolo" },
+  // Ticket 1: planning
   { ticketId: 1, action: "edit" },
+  // Yolo ticket 2 to research
+  { ticketId: 2, action: "move", column: 1 },
   // Ticket 1: plan_ready
   { ticketId: 1, action: "ready" },
-  // YOLO: Ticket 3 jumps to implement
-  { ticketId: 3, action: "yolo" },
+  // Yolo ticket 2 to plan
+  { ticketId: 2, action: "move", column: 2 },
   // Move ticket 1 to implement
   { ticketId: 1, action: "move", column: 3 },
-  // Move ticket 2 to plan
-  { ticketId: 2, action: "move", column: 2 },
-  // Ticket 3 to validate
-  { ticketId: 3, action: "move", column: 4 },
-  // Ticket 2: planning
-  { ticketId: 2, action: "edit" },
+  // Yolo ticket 2 to implement
+  { ticketId: 2, action: "move", column: 3 },
   // Ticket 1 to validate
   { ticketId: 1, action: "move", column: 4 },
-  // Ticket 3 to done (merged)
-  { ticketId: 3, action: "move", column: 5 },
-  // Ticket 2: plan_ready
-  { ticketId: 2, action: "ready" },
+  // Yolo ticket 2 to validate (stops blinking)
+  { ticketId: 2, action: "yolo_complete" },
+  { ticketId: 2, action: "move", column: 4 },
   // Ticket 1 to done
   { ticketId: 1, action: "move", column: 5 },
-  // Ticket 2 to implement
-  { ticketId: 2, action: "move", column: 3 },
-  // Ticket 4 yolo
-  { ticketId: 4, action: "yolo" },
-  // Ticket 2 to validate
-  { ticketId: 2, action: "move", column: 4 },
-  // Ticket 4 to validate
-  { ticketId: 4, action: "move", column: 4 },
   // Ticket 2 to done
   { ticketId: 2, action: "move", column: 5 },
-  // Ticket 4 to done
-  { ticketId: 4, action: "move", column: 5 },
 ];
 
 export function Workflow() {
@@ -151,7 +151,9 @@ export function Workflow() {
         case "ready":
           return { ...issue, isReady: true, isEditing: false };
         case "yolo":
-          return { ...issue, column: 3, isYolo: true };
+          return { ...issue, isYolo: true };
+        case "yolo_complete":
+          return { ...issue, isYoloComplete: true };
         default:
           return issue;
       }
@@ -200,25 +202,25 @@ export function Workflow() {
               ))}
             </div>
 
-            {/* Kanban Lanes */}
-            <div className="grid grid-cols-6 gap-2 min-h-[140px]">
+            {/* Kanban Lanes - Fixed height for 2 tickets */}
+            <div className="grid grid-cols-6 gap-2 h-[160px]">
               {columns.map((col, colIndex) => (
                 <div
                   key={col.id}
-                  className="bg-background/40 rounded-lg p-2 border border-border/50 min-h-[120px]"
+                  className="bg-background/40 rounded-lg p-2 border border-border/50 h-full overflow-hidden"
                 >
                   <div className="space-y-2">
                     {issues
                       .filter((issue) => issue.column === colIndex)
                       .map((issue) => {
-                        const tags = getStatusTags(issue.column, issue.isReady, issue.isEditing, issue.isYolo);
+                        const tags = getStatusTags(issue.column, issue.isReady, issue.isEditing, issue.isYolo, issue.isYoloComplete);
                         return (
                           <div
                             key={issue.id}
                             className={`
                               bg-card border border-border rounded-md p-2 text-xs
                               shadow-sm transition-all duration-500 ease-out
-                              ${issue.isYolo ? "ring-2 ring-kiln-glow animate-pulse" : ""}
+                              ${issue.isYolo && !issue.isYoloComplete ? "ring-2 ring-kiln-glow animate-pulse" : ""}
                             `}
                           >
                             <div className="flex flex-wrap items-center gap-1 mb-1.5">
@@ -232,6 +234,9 @@ export function Workflow() {
                               ))}
                             </div>
                             <div className="flex items-center gap-1.5">
+                              {issue.column === 3 && (
+                                <GitMerge className="w-3 h-3 text-gray-400 flex-shrink-0" />
+                              )}
                               {issue.column === 4 && (
                                 <GitPullRequest className="w-3 h-3 text-green-500 flex-shrink-0" />
                               )}
@@ -254,7 +259,7 @@ export function Workflow() {
         <div className="max-w-2xl mx-auto bg-card/80 border border-border rounded-xl p-6 space-y-3">
           {contentLines.map((line, index) => (
             <p key={index} className="text-foreground/90">
-              {line.includes("yolo") ? (
+              {line.includes('"yolo"') ? (
                 <>
                   {line.split('"yolo"')[0]}
                   <span className="text-kiln-glow font-semibold">"yolo"</span>

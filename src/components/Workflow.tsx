@@ -59,13 +59,7 @@ const getStatusTags = (column: number, isReady: boolean, isEditing: boolean, isY
   return tags;
 };
 
-const contentLines = [
-  "Move issues through your GitHub Project kanban.",
-  "Discuss and refine context by commenting on the Issue during Research and Plan.",
-  "When an Issue moves to Implement, kiln triggers Claude to generate the pull request.",
-  "Or—skip straight from Backlog → Implement (\"yolo\") and let kiln handle the full flow.",
-  "kiln continuously watches the board and orchestrates Claude across each phase.",
-];
+// No longer used - content is now structured differently
 
 interface Issue {
   id: number;
@@ -256,20 +250,71 @@ export function Workflow() {
         </div>
 
         {/* Content Description */}
-        <div className="max-w-2xl mx-auto bg-card/80 border border-border rounded-xl p-6 space-y-3">
-          {contentLines.map((line, index) => (
-            <p key={index} className="text-foreground/90">
-              {line.includes('"yolo"') ? (
-                <>
-                  {line.split('"yolo"')[0]}
-                  <span className="text-kiln-glow font-semibold">"yolo"</span>
-                  {line.split('"yolo"')[1]}
-                </>
-              ) : (
-                line
-              )}
+        <div className="max-w-3xl mx-auto bg-card/80 border border-border rounded-xl p-8 space-y-6">
+          <div className="space-y-4">
+            <p className="text-lg text-foreground/90">
+              Move issues through your GitHub Project board.
             </p>
-          ))}
+            <p className="text-foreground/80">
+              When an issue transitions between columns, kiln automatically runs Claude to handle that phase of work.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-foreground/90 font-medium">Step-by-step:</p>
+            <ol className="list-decimal list-inside space-y-2 text-foreground/80 ml-2">
+              <li>Create an issue on your GitHub Project kanban.</li>
+              <li>
+                Move it through columns — kiln picks it up and runs the appropriate phase.
+                <br />
+                <span className="text-muted-foreground ml-5 text-sm">
+                  (or <span className="text-kiln-glow font-semibold">'yolo'</span> it and let kiln carry it from Backlog to Validate autonomously)
+                </span>
+              </li>
+              <li>Review the pull request when it's ready.</li>
+            </ol>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-foreground/90 font-medium">What happens at each phase:</p>
+            <div className="grid gap-3 text-sm">
+              <div className="flex gap-3">
+                <span className="text-xl">🧠</span>
+                <div>
+                  <span className="font-semibold text-blue-400">Research</span>
+                  <p className="text-foreground/70">Claude explores the codebase and writes insights back to the issue.</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="text-xl">🧩</span>
+                <div>
+                  <span className="font-semibold text-purple-400">Plan</span>
+                  <p className="text-foreground/70">Claude develops a detailed implementation plan and updates the issue.</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="text-xl">💻</span>
+                <div>
+                  <span className="font-semibold text-orange-400">Implement</span>
+                  <p className="text-foreground/70">Claude executes the plan, commits code, and opens a PR.</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="text-xl">🔍</span>
+                <div>
+                  <span className="font-semibold text-yellow-400">Validate</span>
+                  <p className="text-foreground/70">Humans review and approve — Claude stays idle here.</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="text-xl">✅</span>
+                <div>
+                  <span className="font-semibold text-green-400">Done</span>
+                  <p className="text-foreground/70">Worktrees and temporary artifacts are cleaned up.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

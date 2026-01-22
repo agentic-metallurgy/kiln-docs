@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GitPullRequest } from "lucide-react";
+import { GitPullRequest, GitMerge } from "lucide-react";
 
 const columns = [
   { id: "backlog", name: "Backlog", color: "bg-gray-400", description: "new issues" },
@@ -11,15 +11,34 @@ const columns = [
 ];
 
 const ticketTitles = [
-  { title: "create api endpoint", tag: "feature", tagColor: "bg-blue-500" },
-  { title: "evaluate tests", tag: "test", tagColor: "bg-purple-500" },
-  { title: "add monitoring", tag: "infra", tagColor: "bg-cyan-500" },
-  { title: "refactor utils", tag: "refactor", tagColor: "bg-orange-500" },
-  { title: "chore: edit docs", tag: "docs", tagColor: "bg-gray-500" },
-  { title: "bug: /auth/me", tag: "bug", tagColor: "bg-red-500" },
-  { title: "vuln: update deps", tag: "security", tagColor: "bg-yellow-600" },
-  { title: "add rate limiting", tag: "feature", tagColor: "bg-blue-500" },
+  "create api endpoint",
+  "evaluate tests",
+  "add monitoring",
+  "refactor utils",
+  "chore: edit docs",
+  "bug: /auth/me",
+  "vuln: update deps",
+  "add rate limiting",
+  "fix webhook handler",
+  "update schema",
 ];
+
+// Status tags based on column position and progress
+const getStatusTag = (column: number, isReady: boolean): { tag: string; tagColor: string } => {
+  switch (column) {
+    case 0: return { tag: "backlog", tagColor: "bg-gray-500" };
+    case 1: return isReady 
+      ? { tag: "research_ready", tagColor: "bg-blue-400" }
+      : { tag: "researching", tagColor: "bg-blue-600" };
+    case 2: return isReady 
+      ? { tag: "plan_ready", tagColor: "bg-purple-400" }
+      : { tag: "planning", tagColor: "bg-purple-600" };
+    case 3: return { tag: "implementing", tagColor: "bg-orange-500" };
+    case 4: return { tag: "ready to merge", tagColor: "bg-yellow-500" };
+    case 5: return { tag: "merged", tagColor: "bg-green-600" };
+    default: return { tag: "backlog", tagColor: "bg-gray-500" };
+  }
+};
 
 const contentLines = [
   "Move issues through your GitHub Project kanban.",
@@ -32,79 +51,65 @@ const contentLines = [
 interface Issue {
   id: number;
   title: string;
-  tag: string;
-  tagColor: string;
   column: number;
+  isReady: boolean; // For research/plan columns - toggles between working and ready
   isYolo?: boolean;
-  hasPR?: boolean;
 }
 
-const getRandomTicket = () => {
-  const ticket = ticketTitles[Math.floor(Math.random() * ticketTitles.length)];
-  return {
-    id: Date.now() + Math.random(),
-    title: ticket.title,
-    tag: ticket.tag,
-    tagColor: ticket.tagColor,
-    column: 0,
-  };
-};
+// Initialize with fixed 10 tickets
+const initialIssues: Issue[] = [
+  { id: 1, title: ticketTitles[0], column: 0, isReady: false },
+  { id: 2, title: ticketTitles[1], column: 0, isReady: false },
+  { id: 3, title: ticketTitles[2], column: 0, isReady: false },
+  { id: 4, title: ticketTitles[3], column: 0, isReady: false },
+  { id: 5, title: ticketTitles[4], column: 1, isReady: false },
+  { id: 6, title: ticketTitles[5], column: 1, isReady: false },
+  { id: 7, title: ticketTitles[6], column: 2, isReady: false },
+  { id: 8, title: ticketTitles[7], column: 2, isReady: false },
+  { id: 9, title: ticketTitles[8], column: 3, isReady: false },
+  { id: 10, title: ticketTitles[9], column: 3, isReady: false },
+];
 
 export function Workflow() {
-  const [issues, setIssues] = useState<Issue[]>([
-    { ...getRandomTicket(), id: 1, column: 0 },
-    { ...getRandomTicket(), id: 2, column: 1 },
-    { ...getRandomTicket(), id: 3, column: 2 },
-  ]);
+  const [issues, setIssues] = useState<Issue[]>(initialIssues);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIssues((prev) => {
         const newIssues = [...prev];
         
-        // Find an issue to move (not in done)
+        // Find issues not in done
         const movableIssues = newIssues.filter(i => i.column < 5);
         if (movableIssues.length === 0) {
           // Reset when all done
-          return [getRandomTicket(), { ...getRandomTicket(), id: Date.now() + 1 }];
+          return initialIssues.map((issue, idx) => ({ ...issue, id: Date.now() + idx }));
         }
         
-        // Randomly select one to move forward
+        // Randomly select one to progress
         const toMove = movableIssues[Math.floor(Math.random() * movableIssues.length)];
         const issueIndex = newIssues.findIndex(i => i.id === toMove.id);
         
-        // Sometimes do a "yolo" jump from backlog to implement
-        if (toMove.column === 0 && Math.random() > 0.7) {
-          newIssues[issueIndex] = { ...toMove, column: 3, isYolo: true };
+        // Research and Plan columns have two stages: working → ready → next column
+        if ((toMove.column === 1 || toMove.column === 2) && !toMove.isReady) {
+          // Toggle to ready state
+          newIssues[issueIndex] = { ...toMove, isReady: true };
+        } else if (toMove.column === 0 && Math.random() > 0.8) {
+          // Yolo jump from backlog to implement
+          newIssues[issueIndex] = { ...toMove, column: 3, isYolo: true, isReady: false };
         } else {
-          // When moving to validate (column 4), add PR icon
+          // Move to next column
           const newColumn = toMove.column + 1;
-          const hasPR = newColumn >= 4;
           newIssues[issueIndex] = { 
             ...toMove, 
             column: newColumn, 
-            isYolo: toMove.isYolo && newColumn <= 4,
-            hasPR 
+            isReady: false,
+            isYolo: toMove.isYolo && newColumn <= 5,
           };
-        }
-        
-        // Occasionally add a new issue to backlog
-        if (Math.random() > 0.6 && newIssues.filter(i => i.column === 0).length < 2) {
-          newIssues.push(getRandomTicket());
-        }
-        
-        // Remove completed issues after a delay (keeping max 6 issues)
-        if (newIssues.length > 6) {
-          const doneIssues = newIssues.filter(i => i.column === 5);
-          if (doneIssues.length > 0) {
-            const toRemove = doneIssues[0];
-            return newIssues.filter(i => i.id !== toRemove.id);
-          }
         }
         
         return newIssues;
       });
-    }, 2000);
+    }, 1500);
 
     return () => clearInterval(interval);
   }, []);
@@ -144,33 +149,39 @@ export function Workflow() {
                   <div className="space-y-2">
                     {issues
                       .filter((issue) => issue.column === colIndex)
-                      .map((issue) => (
-                        <div
-                          key={issue.id}
-                          className={`
-                            bg-card border border-border rounded-md p-2 text-xs
-                            shadow-sm transition-all duration-500 ease-out
-                            ${issue.isYolo ? "ring-2 ring-kiln-glow animate-pulse" : ""}
-                          `}
-                        >
-                          <div className="flex items-center gap-1.5 mb-1.5">
-                            <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium text-white ${issue.tagColor}`}>
-                              {issue.tag}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            {issue.hasPR && (
-                              <GitPullRequest className="w-3 h-3 text-green-500 flex-shrink-0" />
+                      .map((issue) => {
+                        const status = getStatusTag(issue.column, issue.isReady);
+                        return (
+                          <div
+                            key={issue.id}
+                            className={`
+                              bg-card border border-border rounded-md p-2 text-xs
+                              shadow-sm transition-all duration-500 ease-out
+                              ${issue.isYolo ? "ring-2 ring-kiln-glow animate-pulse" : ""}
+                            `}
+                          >
+                            <div className="flex items-center gap-1.5 mb-1.5">
+                              <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium text-white ${status.tagColor}`}>
+                                {status.tag}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              {issue.column === 4 && (
+                                <GitPullRequest className="w-3 h-3 text-green-500 flex-shrink-0" />
+                              )}
+                              {issue.column === 5 && (
+                                <GitMerge className="w-3 h-3 text-purple-500 flex-shrink-0" />
+                              )}
+                              <span className="truncate">{issue.title}</span>
+                            </div>
+                            {issue.isYolo && issue.column < 5 && (
+                              <span className="text-[10px] text-kiln-glow font-semibold mt-1 block">
+                                yolo →
+                              </span>
                             )}
-                            <span className="truncate">{issue.title}</span>
                           </div>
-                          {issue.isYolo && (
-                            <span className="text-[10px] text-kiln-glow font-semibold mt-1 block">
-                              yolo →
-                            </span>
-                          )}
-                        </div>
-                      ))}
+                        );
+                      })}
                   </div>
                 </div>
               ))}

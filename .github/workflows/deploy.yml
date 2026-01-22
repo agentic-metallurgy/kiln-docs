@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [starlight-updated]
 
 permissions:
   contents: read
@@ -31,6 +33,21 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Setup SSH for kiln-starlight
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STARLIGHT_DEPLOY_KEY }}" > ~/.ssh/starlight_key
+          chmod 600 ~/.ssh/starlight_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Clone and build Starlight docs
+        run: |
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/starlight_key" git clone git@github.com:agentic-metallurgy/kiln-starlight.git
+          cd kiln-starlight
+          npm ci
+          npm run build
+          cp -r dist ../dist/docs
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

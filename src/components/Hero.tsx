@@ -1,8 +1,20 @@
 import kilnLogo from "@/assets/kiln-logo.png";
+import { Button } from "@/components/ui/button";
+import { BookOpen } from "lucide-react";
 
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Documentation button - top right */}
+      <a 
+        href="/docs" 
+        className="absolute top-6 right-6 z-20"
+      >
+        <Button variant="outline" size="sm" className="gap-2">
+          <BookOpen className="w-4 h-4" />
+          Documentation
+        </Button>
+      </a>
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-dark" />
       
@@ -31,10 +43,10 @@ export function Hero() {
           </p>
           
           <p className="text-base text-muted-foreground/80 mb-2 max-w-xl">
-            Co-author the PRD as a team, set to Implement when ready.
+            Co-author the PRD as a team, set to Implement when ready
           </p>
           <p className="text-base text-muted-foreground/80 mb-10 max-w-xl">
-            Let kiln + Claude bake the PR for you.
+            Let kiln + Claude bake the PR for you
           </p>
           
           

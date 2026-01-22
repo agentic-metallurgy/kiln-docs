@@ -278,36 +278,36 @@ export function Workflow() {
           <div className="space-y-4">
             <p className="text-foreground/90 font-medium">What happens at each phase:</p>
             <div className="grid gap-3 text-sm">
-              <div className="flex gap-3">
-                <span className="text-xl">🧠</span>
+              <div className="flex gap-3 items-start">
+                <span className="w-3 h-3 rounded-full bg-blue-500 mt-1 flex-shrink-0" />
                 <div>
                   <span className="font-semibold text-blue-400">Research</span>
                   <p className="text-foreground/70">Claude explores the codebase and writes insights back to the issue.</p>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <span className="text-xl">🧩</span>
+              <div className="flex gap-3 items-start">
+                <span className="w-3 h-3 rounded-full bg-purple-500 mt-1 flex-shrink-0" />
                 <div>
                   <span className="font-semibold text-purple-400">Plan</span>
                   <p className="text-foreground/70">Claude develops a detailed implementation plan and updates the issue.</p>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <span className="text-xl">💻</span>
+              <div className="flex gap-3 items-start">
+                <span className="w-3 h-3 rounded-full bg-orange-500 mt-1 flex-shrink-0" />
                 <div>
                   <span className="font-semibold text-orange-400">Implement</span>
                   <p className="text-foreground/70">Claude executes the plan, commits code, and opens a PR.</p>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <span className="text-xl">🔍</span>
+              <div className="flex gap-3 items-start">
+                <span className="w-3 h-3 rounded-full bg-yellow-500 mt-1 flex-shrink-0" />
                 <div>
                   <span className="font-semibold text-yellow-400">Validate</span>
                   <p className="text-foreground/70">Humans review and approve — Claude stays idle here.</p>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <span className="text-xl">✅</span>
+              <div className="flex gap-3 items-start">
+                <span className="w-3 h-3 rounded-full bg-green-500 mt-1 flex-shrink-0" />
                 <div>
                   <span className="font-semibold text-green-400">Done</span>
                   <p className="text-foreground/70">Worktrees and temporary artifacts are cleaned up.</p>

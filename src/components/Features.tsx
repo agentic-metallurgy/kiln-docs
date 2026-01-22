@@ -48,7 +48,9 @@ export function Features() {
             Built for <span className="text-gradient-fire">Teams</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Solve problems together, keep the context of the PRD, code, tests and the PR all in one place.
+            Stop worrying about the .md files. Focus on solving problems together.
+            <br />
+            Keep the PRDs, code, and PRs all in one context as you co-author solutions.
           </p>
         </div>
         

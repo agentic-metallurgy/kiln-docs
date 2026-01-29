@@ -49,20 +49,6 @@ export function Hero() {
             Let kiln + Claude bake the PR for you
           </p>
           
-          
-          {/* Install command */}
-          <div className="mt-12">
-            <div className="bg-card border border-border rounded-lg p-4 shadow-card inline-block">
-              <div className="text-left">
-                <code className="font-mono text-sm text-muted-foreground block">
-                  <span className="text-kiln-ember">$</span> brew tap agentic-metallurgy/tap
-                </code>
-                <code className="font-mono text-sm text-muted-foreground block">
-                  <span className="text-kiln-ember">$</span> brew install kiln
-                </code>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

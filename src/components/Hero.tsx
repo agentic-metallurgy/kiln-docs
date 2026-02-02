@@ -42,10 +42,6 @@ export function Hero() {
             Orchestrate Claude Code from GitHub
           </p>
 
-          <p className="text-base text-muted-foreground/80 mb-10 max-w-xl">
-            GitHub is the control plane, Claude Code runs locally
-          </p>
-          
         </div>
       </div>
     </section>

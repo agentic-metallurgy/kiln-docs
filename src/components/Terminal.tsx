@@ -4,10 +4,10 @@ export function Terminal() {
       <div className="container px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Start in <span className="text-gradient-fire">Seconds</span>
+            Set and <span className="text-gradient-fire">Forget</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            A single command gets kiln watching your project, ready to work.
+            A single command gets Kiln watching your project, ready to work.
           </p>
         </div>
         

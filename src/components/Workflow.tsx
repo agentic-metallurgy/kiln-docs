@@ -252,31 +252,26 @@ export function Workflow() {
         {/* Content Description */}
         <div className="max-w-3xl mx-auto bg-card/80 border border-border rounded-xl p-8 space-y-6">
           <div className="space-y-4">
-            <p className="text-lg text-foreground/90">
-              Move issues through your GitHub Project board.
-            </p>
+            <h3 className="text-xl md:text-2xl font-semibold text-foreground">
+              Move issues through your GitHub Project board
+            </h3>
             <p className="text-foreground/80">
-              When an issue transitions between columns, kiln automatically runs Claude to handle that phase of work.
+              When you move an issue, Kiln will invoke Claude Code to execute the respective /command locally.
             </p>
           </div>
 
           <div className="space-y-2">
             <p className="text-foreground/90 font-medium">Step-by-step:</p>
-            <ol className="list-decimal list-inside space-y-2 text-foreground/80 ml-2">
-              <li>Create an issue on your GitHub Project kanban.</li>
-              <li>
-                Move it through columns — kiln picks it up and runs the appropriate phase.
-                <br />
-                <span className="text-muted-foreground ml-5 text-sm">
-                  (or add a <span className="text-kiln-glow font-semibold">'yolo'</span> label and let Kiln carry it autonomously through the stages)
-                </span>
-              </li>
-              <li>Review the pull request when it's ready.</li>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-foreground/80 ml-2">
+              <li>Create an issue in your GitHub Kanban's <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-gray-400" /><strong>Backlog</strong></span></li>
+              <li>Move it to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /><strong>Research</strong></span></li>
+              <li>A "researching" label will appear on the issue</li>
+              <li>Once complete, label will change to "research_ready"</li>
             </ol>
           </div>
 
           <div className="space-y-4">
-            <p className="text-foreground/90 font-medium">What happens at each phase:</p>
+            <p className="text-foreground/90 font-medium">Here's what each column can do:</p>
             <div className="grid gap-3 text-sm">
               <div className="flex gap-3 items-start">
                 <span className="w-3 h-3 rounded-full bg-blue-500 mt-1 flex-shrink-0" />

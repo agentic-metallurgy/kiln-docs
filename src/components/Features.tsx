@@ -4,38 +4,38 @@ const features = [
   {
     icon: Bot,
     title: "Claude-Powered",
-    description: "Leverages Claude's advanced reasoning and tools.",
-    description2: "Uses your local Claude and subscription, no external login or API-key trickery needed.",
+    description: "Uses your local Claude Code subscription.",
+    description2: "No new auth or API-key needed.",
   },
   {
     icon: GitBranch,
     title: "GitHub Projects Integration",
-    description: "Native integration with GitHub Projects v2.",
-    description2: "Monitors kanban boards in real-time.",
+    description: "Monitors GitHub project boards in real-time.",
+    description2: "All state is stored on the Issue.",
   },
   {
     icon: FileText,
     title: "Simplify \"md hell\"",
-    description: "Stop worrying about where to save and how to organize .md files.",
-    description2: "All of your context is saved as GitHub issues.",
+    description: "Stop worrying about how to organize .md files.",
+    description2: "All of your context is saved on the GitHub Issue and PR.",
   },
   {
     icon: Search,
     title: "Focus on the Problem",
-    description: "Code is cheap but the problems to solve are still difficult.",
-    description2: "Focus on discussing, clarifying, and solving the problem.",
+    description: "Code is free but the problems are still difficult.",
+    description2: "Focus on solving the problem instead of managing windows and files.",
   },
   {
     icon: RotateCcw,
     title: "Retrying is Cheap",
-    description: "If you don't like how things went, just add the \"reset\" label and start over again.",
+    description: <>If you don't like how things went, just add the <span className="text-blue-400 font-semibold">reset</span> label and start over again.</>,
     description2: "No need to worry.",
   },
   {
     icon: Zap,
     title: "YOLO Mode",
     description: "Confident your initial Issue has enough context?",
-    description2: "Just set the \"yolo\" label and let Claude take it through all stages and deliver your PR.",
+    description2: <>Just set the <span className="text-yellow-400 font-semibold">yolo</span> label and let Kiln move it autonomously to deliver the PR.</>,
   },
 ];
 
@@ -49,8 +49,6 @@ export function Features() {
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Stop worrying about the .md files. Focus on solving problems together.
-            <br />
-            Keep the PRDs, code, and PRs all in one context as you co-author solutions.
           </p>
         </div>
         

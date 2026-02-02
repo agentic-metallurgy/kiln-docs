@@ -1,5 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { GitPullRequest, GitMerge } from "lucide-react";
+import researchAndPlan from "@/assets/research-and-plan-2.gif";
+import humanInTheLoop from "@/assets/human-in-the-loop.gif";
 
 const columns = [
   { id: "backlog", name: "Backlog", color: "bg-gray-400", description: "new issues" },
@@ -132,6 +134,53 @@ const animationScript = [
 export function Workflow() {
   const [issues, setIssues] = useState<Issue[]>(createInitialIssues());
   const [step, setStep] = useState(0);
+  const [gifVisible, setGifVisible] = useState(false);
+  const [gif2Visible, setGif2Visible] = useState(false);
+  const gifRef = useRef<HTMLDivElement>(null);
+  const gif2Ref = useRef<HTMLDivElement>(null);
+
+  // Preload first gif immediately, but only show when scrolled into view
+  useEffect(() => {
+    const img = new Image();
+    img.src = researchAndPlan;
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setGifVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (gifRef.current) {
+      observer.observe(gifRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Second gif - only load when 10% visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setGif2Visible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (gif2Ref.current) {
+      observer.observe(gif2Ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const applyStep = useCallback((issues: Issue[], scriptStep: typeof animationScript[0]): Issue[] => {
     return issues.map(issue => {
@@ -180,136 +229,87 @@ export function Workflow() {
           </h2>
         </div>
 
-        {/* Animated Kanban Board */}
-        <div className="max-w-6xl mx-auto mb-12 overflow-x-auto">
-          <div className="bg-card/60 border border-border rounded-xl p-4 min-w-[800px]">
-            {/* Column Headers */}
-            <div className="grid grid-cols-6 gap-2 mb-4">
-              {columns.map((col) => (
-                <div key={col.id} className="text-center">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <span className={`w-3 h-3 rounded-full ${col.color}`} />
-                    <span className="font-semibold text-sm">{col.name}</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground italic">{col.description}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Kanban Lanes - Fixed height for 2 tickets */}
-            <div className="grid grid-cols-6 gap-2 h-[160px]">
-              {columns.map((col, colIndex) => (
-                <div
-                  key={col.id}
-                  className="bg-background/40 rounded-lg p-2 border border-border/50 h-full overflow-hidden"
-                >
-                  <div className="space-y-2">
-                    {issues
-                      .filter((issue) => issue.column === colIndex)
-                      .map((issue) => {
-                        const tags = getStatusTags(issue.column, issue.isReady, issue.isEditing, issue.isYolo, issue.isYoloComplete);
-                        return (
-                          <div
-                            key={issue.id}
-                            className={`
-                              bg-card border border-border rounded-md p-2 text-xs
-                              shadow-sm transition-all duration-500 ease-out
-                              ${issue.isYolo && !issue.isYoloComplete ? "ring-2 ring-kiln-glow animate-pulse" : ""}
-                            `}
-                          >
-                            <div className="flex flex-wrap items-center gap-1 mb-1.5">
-                              {tags.map((status, idx) => (
-                                <span 
-                                  key={idx}
-                                  className={`px-1.5 py-0.5 rounded text-[9px] font-medium text-white ${status.tagColor}`}
-                                >
-                                  {status.tag}
-                                </span>
-                              ))}
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                              {issue.column === 3 && (
-                                <GitMerge className="w-3 h-3 text-gray-400 flex-shrink-0" />
-                              )}
-                              {issue.column === 4 && (
-                                <GitPullRequest className="w-3 h-3 text-green-500 flex-shrink-0" />
-                              )}
-                              {issue.column === 5 && (
-                                <GitMerge className="w-3 h-3 text-purple-500 flex-shrink-0" />
-                              )}
-                              <span className="truncate">{issue.title}</span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Content Description */}
-        <div className="max-w-3xl mx-auto bg-card/80 border border-border rounded-xl p-8 space-y-6">
+        {/* Orchestrate Description */}
+        <div className="max-w-3xl mx-auto bg-card/80 border border-border rounded-xl p-8 space-y-6 mb-12">
           <div className="space-y-4">
             <h3 className="text-xl md:text-2xl font-semibold text-foreground">
-              Move issues through your GitHub Project board
+              Orchestrate Claude Code from GitHub Projects
             </h3>
             <p className="text-foreground/80">
               When you move an issue, Kiln will invoke Claude Code to execute the respective /command locally.
             </p>
           </div>
 
-          <div className="space-y-2">
-            <p className="text-foreground/90 font-medium">Step-by-step:</p>
-            <ol className="list-decimal list-inside space-y-2 text-sm text-foreground/80 ml-2">
-              <li>Create an issue in your GitHub Kanban's <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-gray-400" /><strong>Backlog</strong></span></li>
-              <li>Move it to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /><strong>Research</strong></span></li>
-              <li>A "researching" label will appear on the issue</li>
-              <li>Once complete, label will change to "research_ready"</li>
-            </ol>
-          </div>
+          <ul className="space-y-2 text-sm text-foreground/80 ml-2">
+            <li>• Use your existing Claude subscription (no auth trickery, no API keys needed, runs locally)</li>
+            <li>• All context and state is on GitHub (no markdown mess, no local DBs, easy recovery)</li>
+            <li>• Poll instead of webhooks/events (no external attack surfaces, works behind VPN)</li>
+            <li>• Supports MCPs and anything else Claude can do</li>
+          </ul>
+        </div>
 
+        {/* End-to-end flow GIF */}
+        <div ref={gifRef} className="max-w-5xl mx-auto mb-12">
+          {gifVisible && (
+            <img
+              src={researchAndPlan}
+              alt="Research and plan demonstration"
+              className="w-full rounded-xl border border-border shadow-card"
+            />
+          )}
+        </div>
+
+        {/* Step by step */}
+        <div className="max-w-3xl mx-auto bg-card/80 border border-border rounded-xl p-8 mb-16 space-y-6">
+          <h3 className="text-xl md:text-2xl font-semibold text-foreground">
+            The Flow
+          </h3>
+          <ol className="list-decimal list-inside space-y-2 text-sm text-foreground/80 ml-2">
+            <li>Create Issues in your GitHub kanban board</li>
+            <li>Move them to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /><strong>Research</strong></span>, <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-purple-500" /><strong>Plan</strong></span>, or <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-orange-500" /><strong>Implement</strong></span></li>
+            <li>Kiln invokes your local Claude Code and uses Labels to track state</li>
+            <li>Once complete, labels like <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">research_ready</span>, <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">plan_ready</span> appear</li>
+            <li>Implementation begins with a draft PR and is coded iteratively</li>
+            <li>When coding is complete, Issue moves to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-yellow-500" /><strong>Validate</strong></span>, PR is set to ready for review</li>
+          </ol>
+        </div>
+
+        {/* Human in the Loop */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Human in the <span className="text-gradient-fire">Loop</span>
+          </h2>
+        </div>
+
+        {/* You Decide When It's Ready */}
+        <div className="max-w-3xl mx-auto bg-card/80 border border-border rounded-xl p-8 space-y-6">
           <div className="space-y-4">
-            <p className="text-foreground/90 font-medium">Here's what each column can do:</p>
-            <div className="grid gap-3 text-sm">
-              <div className="flex gap-3 items-start">
-                <span className="w-3 h-3 rounded-full bg-blue-500 mt-1 flex-shrink-0" />
-                <div>
-                  <span className="font-semibold text-blue-400">Research</span>
-                  <p className="text-foreground/70">Claude explores the codebase and writes insights back to the issue.</p>
-                </div>
-              </div>
-              <div className="flex gap-3 items-start">
-                <span className="w-3 h-3 rounded-full bg-purple-500 mt-1 flex-shrink-0" />
-                <div>
-                  <span className="font-semibold text-purple-400">Plan</span>
-                  <p className="text-foreground/70">Claude develops a detailed implementation plan and updates the issue.</p>
-                </div>
-              </div>
-              <div className="flex gap-3 items-start">
-                <span className="w-3 h-3 rounded-full bg-orange-500 mt-1 flex-shrink-0" />
-                <div>
-                  <span className="font-semibold text-orange-400">Implement</span>
-                  <p className="text-foreground/70">Claude executes the plan, commits code, and opens a PR.</p>
-                </div>
-              </div>
-              <div className="flex gap-3 items-start">
-                <span className="w-3 h-3 rounded-full bg-yellow-500 mt-1 flex-shrink-0" />
-                <div>
-                  <span className="font-semibold text-yellow-400">Validate</span>
-                  <p className="text-foreground/70">Humans review and approve — Claude stays idle here.</p>
-                </div>
-              </div>
-              <div className="flex gap-3 items-start">
-                <span className="w-3 h-3 rounded-full bg-green-500 mt-1 flex-shrink-0" />
-                <div>
-                  <span className="font-semibold text-green-400">Done</span>
-                  <p className="text-foreground/70">Worktrees and temporary artifacts are cleaned up.</p>
-                </div>
-              </div>
-            </div>
+            <h3 className="text-xl md:text-2xl font-semibold text-foreground">
+              You Decide When It's Ready
+            </h3>
+            <p className="text-foreground/80">
+              At every step, a human decides when to proceed.
+            </p>
+            <p className="text-foreground/80">
+              This inherently provides a full audit trail — every action is timestamped and recorded in GitHub, ready for metrics and reporting.
+            </p>
+            <p className="text-foreground/80">
+              Comment under Research or Plan to make decisions, edit and refine.
+              <br />
+              Send to the next phase when you're ready.
+            </p>
           </div>
+        </div>
+
+        {/* Human in the Loop GIF */}
+        <div ref={gif2Ref} className="max-w-5xl mx-auto mt-16">
+          {gif2Visible && (
+            <img
+              src={humanInTheLoop}
+              alt="Human in the loop demonstration"
+              className="w-full rounded-xl border border-border shadow-card"
+            />
+          )}
         </div>
       </div>
     </section>

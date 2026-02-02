@@ -48,7 +48,9 @@ export function Features() {
             Built for <span className="text-gradient-fire">Teams</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Stop worrying about the .md files. Focus on solving problems together.
+            Stop worrying about .md files and where they go.
+            <br />
+            Focus on solving the real problems, together.
           </p>
         </div>
         

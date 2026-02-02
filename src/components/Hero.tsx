@@ -1,20 +1,10 @@
 import kilnLogo from "@/assets/kiln-logo.png";
 import { Button } from "@/components/ui/button";
-import { BookOpen } from "lucide-react";
+import { Github, ArrowRight } from "lucide-react";
 
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Documentation button - top right */}
-      <a 
-        href="/docs" 
-        className="absolute top-6 right-6 z-20"
-      >
-        <Button variant="outline" size="sm" className="gap-2">
-          <BookOpen className="w-4 h-4" />
-          Documentation
-        </Button>
-      </a>
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-dark" />
       
@@ -38,10 +28,39 @@ export function Hero() {
           </h1>
           
           {/* Tagline */}
-          <p className="text-xl md:text-2xl text-muted-foreground mb-4 max-w-2xl">
+          <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-2xl">
             Orchestrate Claude Code from GitHub
           </p>
 
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <a href="https://github.com/agentic-metallurgy/kiln" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="bg-gradient-fire text-primary-foreground hover:opacity-90 transition-opacity shadow-glow group">
+                <Github className="mr-2 h-5 w-5" />
+                View on GitHub
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </a>
+            <a href="/docs">
+              <Button size="lg" variant="outline" className="border-border hover:bg-secondary/50">
+                Documentation
+              </Button>
+            </a>
+          </div>
+
+          {/* Install command */}
+          <div className="mt-12">
+            <div className="bg-card border border-border rounded-lg p-4 shadow-card inline-block">
+              <div className="text-left">
+                <code className="font-mono text-sm text-muted-foreground block">
+                  <span className="text-kiln-ember">$</span> brew tap agentic-metallurgy/tap
+                </code>
+                <code className="font-mono text-sm text-muted-foreground block">
+                  <span className="text-kiln-ember">$</span> brew install kiln
+                </code>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

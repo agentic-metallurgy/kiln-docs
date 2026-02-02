@@ -39,14 +39,11 @@ export function Hero() {
           
           {/* Tagline */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-4 max-w-2xl">
-            Orchestrate Claude-powered workflows in GitHub
+            Orchestrate Claude Code from GitHub
           </p>
-          
-          <p className="text-base text-muted-foreground/80 mb-2 max-w-xl">
-            Co-author the PRD as a team, set to Implement when ready
-          </p>
+
           <p className="text-base text-muted-foreground/80 mb-10 max-w-xl">
-            Let kiln + Claude bake the PR for you
+            GitHub is the control plane, Claude Code runs locally
           </p>
           
         </div>

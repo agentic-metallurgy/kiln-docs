@@ -268,7 +268,7 @@ export function Workflow() {
                 Move it through columns — kiln picks it up and runs the appropriate phase.
                 <br />
                 <span className="text-muted-foreground ml-5 text-sm">
-                  (or <span className="text-kiln-glow font-semibold">'yolo'</span> it and let kiln carry it from Backlog to Validate autonomously)
+                  (or add a <span className="text-kiln-glow font-semibold">'yolo'</span> label and let Kiln carry it autonomously through the stages)
                 </span>
               </li>
               <li>Review the pull request when it's ready.</li>

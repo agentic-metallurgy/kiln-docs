@@ -58,14 +58,6 @@ export function Terminal() {
                 <p className="text-muted-foreground">
                   <span className="text-kiln-glow">→</span> Starting research phase...
                 </p>
-                <p className="text-muted-foreground mt-2">
-                  <span className="text-foreground">Claude:</span> Analyzing issue context and codebase structure...
-                </p>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <span className="text-kiln-ember">$</span>
-                <span className="w-2 h-5 bg-foreground animate-pulse" />
               </div>
             </div>
           </div>

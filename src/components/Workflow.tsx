@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { GitPullRequest, GitMerge } from "lucide-react";
-import researchAndPlan from "@/assets/research-and-plan-1080p-30fps.gif";
+import researchAndPlan from "@/assets/ratio-math-research-ready.gif";
 import humanInTheLoop from "@/assets/human-in-the-loop.gif";
 
 const columns = [
@@ -236,16 +236,12 @@ export function Workflow() {
               Orchestrate Claude Code from GitHub Projects
             </h3>
             <p className="text-lg text-foreground/80">
-              When you move an issue, Kiln will invoke Claude Code to execute the respective /command locally.
+              When you move an issue, <span className="text-gradient-fire font-semibold">Kiln</span> will invoke Claude Code to execute the respective /command locally.
+            </p>
+            <p className="text-lg text-foreground/80">
+              Example: Moving to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /><strong>Research</strong></span> triggers the <span className="text-blue-400 font-mono">/research_codebase</span> command.
             </p>
           </div>
-
-          <ul className="space-y-2 text-lg text-foreground/80 ml-2">
-            <li>• Use your existing Claude subscription (no auth trickery, no API keys needed, runs locally)</li>
-            <li>• All context and state is on GitHub (no markdown mess, no local DBs, easy recovery)</li>
-            <li>• Poll instead of webhooks/events (no external attack surfaces, works behind VPN)</li>
-            <li>• Supports MCPs and anything else Claude can do</li>
-          </ul>
         </div>
 
         {/* End-to-end flow GIF */}
@@ -267,9 +263,9 @@ export function Workflow() {
           <ol className="list-decimal list-inside space-y-2 text-lg text-foreground/80 ml-2">
             <li>Create Issues in your GitHub kanban board</li>
             <li>Move them to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /><strong>Research</strong></span>, <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-purple-500" /><strong>Plan</strong></span>, or <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-orange-500" /><strong>Implement</strong></span></li>
-            <li>Kiln invokes your local Claude Code and uses Labels to track state</li>
-            <li>Once complete, labels like <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">research_ready</span>, <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">plan_ready</span> appear</li>
-            <li>Implementation begins with a draft PR and is coded iteratively</li>
+            <li><span className="text-gradient-fire font-semibold">Kiln</span> invokes your local Claude Code and uses Labels to track state</li>
+            <li>Once complete, labels like <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">research_ready</span>, <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">plan_ready</span> indicate status</li>
+            <li>The <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-orange-500" /><strong>Implement</strong></span> stage is a Ralph Loop that stops when checklist is complete</li>
             <li>When coding is complete, Issue moves to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-yellow-500" /><strong>Validate</strong></span>, PR is set to ready for review</li>
           </ol>
         </div>
@@ -291,10 +287,7 @@ export function Workflow() {
               At every step, a human decides when to proceed.
             </p>
             <p className="text-lg text-foreground/80">
-              This inherently provides a full audit trail — every action is timestamped and recorded in GitHub, ready for metrics and reporting.
-            </p>
-            <p className="text-lg text-foreground/80">
-              Comment under Research or Plan to make decisions, edit and refine.
+              Comment under <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /><strong>Research</strong></span> or <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-purple-500" /><strong>Plan</strong></span> to make decisions, edit and refine.
               <br />
               Send to the next phase when you're ready.
             </p>

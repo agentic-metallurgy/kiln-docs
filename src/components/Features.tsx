@@ -9,7 +9,7 @@ const features = [
   },
   {
     icon: GitBranch,
-    title: "GitHub Projects Integration",
+    title: "GitHub as Truth",
     description: "Monitors GitHub project boards in real-time.",
     description2: "All state is stored on the Issue.",
   },
@@ -35,7 +35,7 @@ const features = [
     icon: Zap,
     title: "YOLO Mode",
     description: "Confident your initial Issue has enough context?",
-    description2: <>Just set the <span className="text-yellow-400 font-semibold">yolo</span> label and let Kiln move it autonomously to deliver the PR.</>,
+    description2: <>Just set the <span className="text-purple-400 font-semibold">yolo</span> label and let Kiln move it autonomously to deliver the PR.</>,
   },
 ];
 
@@ -45,7 +45,7 @@ export function Features() {
       <div className="container px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Built for <span className="text-gradient-fire">Teams</span>
+            Built for <span className="text-gradient-fire">Developers</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Stop worrying about .md files and where they go.

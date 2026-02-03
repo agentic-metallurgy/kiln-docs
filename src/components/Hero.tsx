@@ -58,6 +58,9 @@ export function Hero() {
                 <code className="font-mono text-sm text-muted-foreground block">
                   <span className="text-kiln-ember">$</span> brew install kiln
                 </code>
+                <code className="font-mono text-sm text-muted-foreground block">
+                  <span className="text-kiln-ember">$</span> kiln
+                </code>
               </div>
             </div>
           </div>

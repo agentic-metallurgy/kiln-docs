@@ -1,6 +1,6 @@
 import kilnLogo from "@/assets/kiln-logo.png";
 import { Button } from "@/components/ui/button";
-import { Github, ArrowRight } from "lucide-react";
+import { Github, ArrowRight, BookOpen } from "lucide-react";
 
 export function Hero() {
   return (
@@ -33,7 +33,7 @@ export function Hero() {
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="https://github.com/agentic-metallurgy/kiln" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="bg-gradient-fire text-primary-foreground hover:opacity-90 transition-opacity shadow-glow group">
                 <Github className="mr-2 h-5 w-5" />
@@ -42,7 +42,8 @@ export function Hero() {
               </Button>
             </a>
             <a href="/docs">
-              <Button size="lg" variant="outline" className="border-border hover:bg-secondary/50">
+              <Button size="lg" variant="ghost" className="text-muted-foreground hover:text-foreground border border-border bg-card hover:bg-card/80">
+                <BookOpen className="mr-2 h-5 w-5" />
                 Documentation
               </Button>
             </a>

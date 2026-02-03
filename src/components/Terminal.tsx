@@ -1,4 +1,4 @@
-import { Github, ArrowRight } from "lucide-react";
+import { Github, ArrowRight, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Terminal() {
@@ -23,7 +23,8 @@ export function Terminal() {
               </Button>
             </a>
             <a href="/docs">
-              <Button size="lg" variant="outline" className="border-border hover:bg-secondary/50">
+              <Button size="lg" variant="ghost" className="text-muted-foreground hover:text-foreground border border-border bg-card hover:bg-card/80">
+                <BookOpen className="mr-2 h-5 w-5" />
                 Documentation
               </Button>
             </a>

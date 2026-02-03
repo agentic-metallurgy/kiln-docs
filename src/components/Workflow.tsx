@@ -139,10 +139,12 @@ export function Workflow() {
   const gifRef = useRef<HTMLDivElement>(null);
   const gif2Ref = useRef<HTMLDivElement>(null);
 
-  // Preload first gif immediately, but only show when scrolled into view
+  // Preload both gifs immediately
   useEffect(() => {
-    const img = new Image();
-    img.src = researchAndPlan;
+    const img1 = new Image();
+    img1.src = researchAndPlan;
+    const img2 = new Image();
+    img2.src = humanInTheLoop;
   }, []);
 
   useEffect(() => {
@@ -163,23 +165,9 @@ export function Workflow() {
     return () => observer.disconnect();
   }, []);
 
-  // Second gif - only load when 10% visible
+  // Second gif - load immediately (preloaded above)
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setGif2Visible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (gif2Ref.current) {
-      observer.observe(gif2Ref.current);
-    }
-
-    return () => observer.disconnect();
+    setGif2Visible(true);
   }, []);
 
   const applyStep = useCallback((issues: Issue[], scriptStep: typeof animationScript[0]): Issue[] => {
@@ -236,7 +224,7 @@ export function Workflow() {
               Orchestrate Claude Code from GitHub Projects
             </h3>
             <p className="text-lg text-foreground/80">
-              When you move an issue, <span className="text-gradient-fire font-semibold">Kiln</span> will invoke Claude Code to execute the respective /command locally.
+              When you move an issue, <span className="text-gradient-fire font-semibold">Kiln</span> will invoke Claude Code to execute the respective Claude Code command locally.
             </p>
             <p className="text-lg text-foreground/80">
               Example: Moving to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /><strong>Research</strong></span> triggers the <span className="text-blue-400 font-mono">/research_codebase</span> command.

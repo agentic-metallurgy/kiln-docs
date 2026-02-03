@@ -1,4 +1,4 @@
-import { Github, BookOpen } from "lucide-react";
+import { Github, BookOpen, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -23,7 +23,7 @@ export function Footer() {
             </a>
           </div>
           <span className="text-sm text-muted-foreground">
-            Made by Elon Demirock · Open source, MIT License
+            Made by <a href="https://www.linkedin.com/in/elondemirock/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors inline-flex items-center gap-1">Elon Demirock (<Linkedin className="w-4 h-4" />)</a> · Open source, MIT License
           </span>
         </div>
       </div>

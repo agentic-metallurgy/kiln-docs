@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { GitPullRequest, GitMerge } from "lucide-react";
-import researchAndPlan from "@/assets/research-and-plan-2.gif";
+import researchAndPlan from "@/assets/research-and-plan-1080p-30fps.gif";
 import humanInTheLoop from "@/assets/human-in-the-loop.gif";
 
 const columns = [
@@ -235,12 +235,12 @@ export function Workflow() {
             <h3 className="text-xl md:text-2xl font-semibold text-foreground">
               Orchestrate Claude Code from GitHub Projects
             </h3>
-            <p className="text-foreground/80">
+            <p className="text-lg text-foreground/80">
               When you move an issue, Kiln will invoke Claude Code to execute the respective /command locally.
             </p>
           </div>
 
-          <ul className="space-y-2 text-sm text-foreground/80 ml-2">
+          <ul className="space-y-2 text-lg text-foreground/80 ml-2">
             <li>• Use your existing Claude subscription (no auth trickery, no API keys needed, runs locally)</li>
             <li>• All context and state is on GitHub (no markdown mess, no local DBs, easy recovery)</li>
             <li>• Poll instead of webhooks/events (no external attack surfaces, works behind VPN)</li>
@@ -264,7 +264,7 @@ export function Workflow() {
           <h3 className="text-xl md:text-2xl font-semibold text-foreground">
             The Flow
           </h3>
-          <ol className="list-decimal list-inside space-y-2 text-sm text-foreground/80 ml-2">
+          <ol className="list-decimal list-inside space-y-2 text-lg text-foreground/80 ml-2">
             <li>Create Issues in your GitHub kanban board</li>
             <li>Move them to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /><strong>Research</strong></span>, <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-purple-500" /><strong>Plan</strong></span>, or <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-orange-500" /><strong>Implement</strong></span></li>
             <li>Kiln invokes your local Claude Code and uses Labels to track state</li>
@@ -287,13 +287,13 @@ export function Workflow() {
             <h3 className="text-xl md:text-2xl font-semibold text-foreground">
               You Decide When It's Ready
             </h3>
-            <p className="text-foreground/80">
+            <p className="text-lg text-foreground/80">
               At every step, a human decides when to proceed.
             </p>
-            <p className="text-foreground/80">
+            <p className="text-lg text-foreground/80">
               This inherently provides a full audit trail — every action is timestamped and recorded in GitHub, ready for metrics and reporting.
             </p>
-            <p className="text-foreground/80">
+            <p className="text-lg text-foreground/80">
               Comment under Research or Plan to make decisions, edit and refine.
               <br />
               Send to the next phase when you're ready.

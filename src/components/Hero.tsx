@@ -29,7 +29,7 @@ export function Hero() {
           
           {/* Tagline */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-2xl">
-            Orchestrate Claude Code from GitHub
+            Orchestrate local Claude Code using GitHub Projects
           </p>
 
           {/* CTAs */}

@@ -221,10 +221,10 @@ export function Workflow() {
         <div className="max-w-3xl mx-auto bg-card/80 border border-border rounded-xl p-8 space-y-6 mb-12">
           <div className="space-y-4">
             <h3 className="text-xl md:text-2xl font-semibold text-foreground">
-              Orchestrate Claude Code from GitHub Projects
+              Your GitHub board drives your Claude Code
             </h3>
             <p className="text-lg text-foreground/80">
-              When you move an issue, <span className="text-gradient-fire font-semibold">Kiln</span> will invoke Claude Code to execute the respective Claude Code command locally.
+              Drag issues across your board. Kiln orchestrates Claude Code to research, plan, and implement using your existing subscription. Everything stays on your computer, no auth tricks.
             </p>
             <p className="text-lg text-foreground/80">
               Example: Moving to <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /><strong>Research</strong></span> triggers the <span className="text-blue-400 font-mono">/research_codebase</span> command.
